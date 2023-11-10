@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import {logo} from "../constants"
 const Footer = () => {
   return (
-    <footer className="pt-4 my-md-5 pt-md-5 border-top container">
+    <footer className="pt-4 my-md-5 pt-md-5 border-top">
       <div className="row">
         <div className="col-12 col-md">
           <img

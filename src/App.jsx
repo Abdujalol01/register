@@ -3,7 +3,7 @@ import { Footer, Login, Main, Navbar, Register } from "./components";
 const App = () => {
   const Layout = () => {
     return (
-      <div className="app">
+      <div className="container">
         <Navbar />
         <Outlet />
         <Footer />
