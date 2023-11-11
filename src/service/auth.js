@@ -6,12 +6,12 @@ const AuthService = {
     return data;
   },
   async userLogin(user) {
-    const response = await axios.post("/users/login", { user });
-    return response;
+    const { data } = await axios.post("/users/login", { user });
+    return data;
   },
   async getUsers() {
-    const response = await axios.get("/user");
-    return response;
+    const { data } = await axios.get("/user");
+    return data;
   },
 };
 export default AuthService;

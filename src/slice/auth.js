@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { setItem } from "../helpers/persintage-storage";
 
 const initialState = {
   isLoading: false,
@@ -18,15 +19,20 @@ export const authSlice = createSlice({
       state.isLoading = false;
       state.loggedIn = true;
       state.user = action.payload;
+      setItem("Token", action.payload.token);
     },
     siginUserFailure: (state, action) => {
       state.isLoading = false;
-      state.error = "error";
+      state.error = action.payload;
+    },
+    logoutUser: (state) => {
+      state.user = false;
+      state.loggedIn = false;
     },
   },
 });
 
-export const { siginUserFailure, siginUserSuccess, signUserStart } =
+export const { siginUserFailure, logoutUser, siginUserSuccess, signUserStart } =
   authSlice.actions;
 
 export default authSlice.reducer;

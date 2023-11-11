@@ -1,5 +1,9 @@
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import { Footer, Login, Main, Navbar, Register } from "./components";
+import AuthService from "./service/auth";
+import { useDispatch } from "react-redux";
+import { siginUserSuccess } from "./slice/auth";
+import { useEffect } from "react";
 const App = () => {
   const Layout = () => {
     return (
@@ -31,6 +35,21 @@ const App = () => {
       ],
     },
   ]);
+
+ const dispatch = useDispatch()
+  // getUser
+  const getUser =async()=>{
+    try {
+      const response =await AuthService.getUsers()
+      dispatch(siginUserSuccess(response.user))
+    } catch (error) {
+      console.log("hey bro something went wrong");
+    } 
+  }
+
+  useEffect(()=>{
+    getUser()
+  },)
   return (
     <div>
       <RouterProvider router={router} />
