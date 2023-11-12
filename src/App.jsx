@@ -4,6 +4,9 @@ import AuthService from "./service/auth";
 import { useDispatch } from "react-redux";
 import { siginUserSuccess } from "./slice/auth";
 import { useEffect } from "react";
+import { ArticleService } from "./service/articles";
+import { articleFailure, articleStart, articleSuccess } from "./slice/articles";
+import ArticleDetail from "./components/article-detail";
 const App = () => {
   const Layout = () => {
     return (
@@ -23,7 +26,7 @@ const App = () => {
           path: "/",
           element: <Main />,
         },
-        
+
         {
           path: "/login",
           element: <Login />,
@@ -32,24 +35,37 @@ const App = () => {
           path: "/register",
           element: <Register />,
         },
+        {
+          path: "/article/:slug",
+          element: < ArticleDetail/>,
+        },
       ],
     },
   ]);
 
- const dispatch = useDispatch()
+  const dispatch = useDispatch();
   // getUser
-  const getUser =async()=>{
+  const getUser = async () => {
     try {
-      const response =await AuthService.getUsers()
-      dispatch(siginUserSuccess(response.user))
+      const response = await AuthService.getUsers();
+      dispatch(siginUserSuccess(response.user));
     } catch (error) {
       console.log("hey bro something went wrong");
-    } 
-  }
-
-  useEffect(()=>{
-    getUser()
-  },)
+    }
+  };
+  const getArticle = async () => {
+    dispatch(articleStart(articleStart()))
+    try {
+      const response = await ArticleService.getArticle();
+      dispatch(articleSuccess(response.articles));
+    } catch (error) {
+      dispatch(articleFailure(error));
+    }
+  };
+  useEffect(() => {
+    getUser();
+    getArticle();
+  });
   return (
     <div>
       <RouterProvider router={router} />
