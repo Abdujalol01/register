@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import { CreateArticle, Footer, Login, Main, Navbar, Register } from "./components";
+import { CreateArticle, EditArticle, Footer, Login, Main, Navbar, Register } from "./components";
 import AuthService from "./service/auth";
 import { useDispatch } from "react-redux";
 import { siginUserSuccess } from "./slice/auth";
@@ -54,6 +54,10 @@ const App = () => {
         {
           path: "/create-article",
           element: < CreateArticle />,
+        },
+        {
+          path: "/edit-article/:slug",
+          element: < EditArticle />,
         },
       ],
     },

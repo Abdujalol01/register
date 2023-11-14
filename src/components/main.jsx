@@ -5,7 +5,6 @@ import moment from "moment";
 import { articleFailure, articleStart, articleSuccess } from "../slice/articles";
 import { ArticleService } from "../service/articles";
 import { useEffect } from "react";
-import AuthService from "../service/auth";
 
 const Main = () => {
   const dispatch = useDispatch()
@@ -68,6 +67,7 @@ const Main = () => {
                       <button
                         type="button"
                         className="btn btn-sm btn-outline-secondary"
+                        onClick={() => navigate(`edit-article/${item.slug}`)}
                       >
                         Edit
                       </button>
