@@ -5,6 +5,7 @@ import moment from "moment";
 import { articleFailure, articleStart, articleSuccess } from "../slice/articles";
 import { ArticleService } from "../service/articles";
 import { useEffect } from "react";
+import AuthService from "../service/auth";
 
 const Main = () => {
   const dispatch = useDispatch()
@@ -18,10 +19,20 @@ const Main = () => {
       dispatch(articleFailure(error));
     }
   };
+
+  const deleteArticle = async (slug) => {
+    try {
+      await ArticleService.deleteArticle(slug)
+      getArticle()
+    } catch (error) {
+      console.log(error);
+    }
+  }
   useEffect(() => {
     getArticle()
   }, [])
   const { articles, isLoading } = useSelector((state) => state.article);
+  const { loggedIn, user } = useSelector((state) => state.auth)
   return isLoading ? (
     <Loader />
   ) : (
@@ -52,13 +63,19 @@ const Main = () => {
                   >
                     View
                   </button>
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-outline-secondary"
-                  >
-                    Edit
-                  </button>
-                  <button className="btn btn-outline-danger">Delete</button>
+                  {loggedIn && user.username === item.author.username && (
+                    <>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-outline-secondary"
+                      >
+                        Edit
+                      </button>
+                      <button className="btn btn-outline-danger"
+                        onClick={() => deleteArticle(item.slug)}
+                      >Delete</button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
