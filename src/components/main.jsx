@@ -1,9 +1,26 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Loader } from "./";
 import { useNavigate } from "react-router";
 import moment from "moment";
+import { articleFailure, articleStart, articleSuccess } from "../slice/articles";
+import { ArticleService } from "../service/articles";
+import { useEffect } from "react";
+
 const Main = () => {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
+  const getArticle = async () => {
+    dispatch(articleStart())
+    try {
+      const response = await ArticleService.getArticle();
+      dispatch(articleSuccess(response.articles));
+    } catch (error) {
+      dispatch(articleFailure(error));
+    }
+  };
+  useEffect(() => {
+    getArticle()
+  }, [])
   const { articles, isLoading } = useSelector((state) => state.article);
   return isLoading ? (
     <Loader />
@@ -11,8 +28,8 @@ const Main = () => {
     <div className="container">
       <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         {articles.map((item) => (
-          <div className="col" >
-            <div className="card shadow-sm h-100" key={item.id}>
+          <div className="col" key={item.slug}>
+            <div className="card shadow-sm h-100" >
               <img className="h-50 img-fluid" src={item.author.image} alt="" />
               <div className="card-body">
                 <p className="card-text">{item.title}</p>
@@ -31,7 +48,7 @@ const Main = () => {
                   <button
                     type="button"
                     className="btn btn-sm btn-outline-success"
-                    onClick={()=> navigate(`/article/${item.slug}`) }
+                    onClick={() => navigate(`/article/${item.slug}`)}
                   >
                     View
                   </button>
